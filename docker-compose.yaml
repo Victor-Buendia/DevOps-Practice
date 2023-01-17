@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  database:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=lappis
+      - MONGO_INITDB_ROOT_PASSWORD=lappis
+      - MONGO_INITDB_DATABASE=mongodb
+    networks:
+    - netw
+
+networks:
+  netw:
+    driver: bridge
