@@ -5,12 +5,29 @@ services:
     image: mongo:latest
     container_name: mongo
     restart: always
+    command: --quiet
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lappis
       - MONGO_INITDB_ROOT_PASSWORD=lappis
       - MONGO_INITDB_DATABASE=mongodb
+    ports:
+      - "4000:4000"
     networks:
     - netw
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/src
+    command: python main.py
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+    ports:
+      - "5000:5000"
 
 networks:
   netw:
