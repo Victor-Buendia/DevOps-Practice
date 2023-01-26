@@ -1,34 +1,56 @@
 version: '3.8'
 
+networks:
+  netw:
+    driver: bridge
+
 services:
-  database:
+  banco-mongo:
     image: mongo:latest
-    container_name: mongo
-    restart: always
-    command: --quiet
+    container_name: banco-mongo
+    restart: on-failure:3
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lappis
       - MONGO_INITDB_ROOT_PASSWORD=lappis
-      - MONGO_INITDB_DATABASE=mongodb
+      - MONGO_INITDB_DATABASE=mongo
     ports:
-      - "4000:4000"
+      - "27017:27017"
     networks:
     - netw
 
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    restart: on-failure:3
+    ports:
+      - "3000:3000"
+    environment:
+      - MB_DB_HOST=mongo
+      - MB_DB_DBNAME=mongo
+      - MB_DB_FILE=/app/metabase-data/metabase.db
+      - MB_DB_PORT=4000
+      - MB_DB_USER=lappis
+      - MB_DB_PASS=lappis
+    volumes:
+      - ./metabase:/app/metabase-data
+    networks:
+      - netw
+    depends_on:
+      - banco-mongo
+
   app:
     container_name: app
+    restart: on-failure:3
     build:
       context: .
       dockerfile: Dockerfile
     working_dir: /app/src
     command: python main.py
     volumes:
-      - .:/app
+      - ./:/app
     depends_on:
-      - database
+      - banco-mongo
     ports:
       - "5000:5000"
-
-networks:
-  netw:
-    driver: bridge
+    networks:
+      - netw
