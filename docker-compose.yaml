@@ -8,6 +8,8 @@ services:
   banco-mongo:
     image: mongo:latest
     container_name: banco-mongo
+    volumes:
+      - ./data:/dumbdata
     restart: on-failure:3
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lappis
