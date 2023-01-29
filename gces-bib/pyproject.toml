@@ -57,6 +57,7 @@ whatlies = "0.7.0"
 zipp = "3.11.0"
 breathe = "^4.34.0"
 sphinx = "5.3.0"
+cython = "0.29.14"
 
 
 [build-system]
