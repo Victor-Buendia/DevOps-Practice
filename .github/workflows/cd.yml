@@ -24,6 +24,7 @@ jobs:
       - name: Install Poetry and Build Package
         run: |
           cd gces-bib
+          poetry version major
           poetry build
           poetry install
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
