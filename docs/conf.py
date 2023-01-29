@@ -24,7 +24,7 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 breathe_projects = {
-    "GCES": "/home/buendia/Documents/GCES/Trabalho-Individual-2022-2/docs/xml",
+    "GCES": "../docs/xml",
 }
 
 

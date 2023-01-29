@@ -24,6 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: mattnotmitt/doxygen-action@v1.9.5
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install breathe sphinx
+      - name: Build HTML docs
+        run: |
+          sphinx-build -b html ./docs _build
 
   test:
     runs-on: ubuntu-latest
