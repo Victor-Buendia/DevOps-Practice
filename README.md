@@ -50,6 +50,8 @@ Deverá ser utilizado um orquestrador (Docker Compose) para gerenciar comunicaç
 ---
 ```
 sudo docker-compose up --build
+docker exec -it $(docker ps -f "name=mongo" -q) bash \
+mongoimport --drop --authenticationDatabase=admin -u=lappis -p=lappis  --host=mongodatabase --db="gces" --collection="vaccination" --type=csv --headerline --file=/dumbdata/vaccination-data.csv
 ```
 
 ## Gestão de dependencias e pacotes python

@@ -5,16 +5,16 @@ networks:
     driver: bridge
 
 services:
-  banco-mongo:
+  mongodatabase:
     image: mongo:latest
-    container_name: banco-mongo
+    container_name: mongodatabase
     volumes:
       - ./data:/dumbdata
     restart: on-failure:3
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lappis
       - MONGO_INITDB_ROOT_PASSWORD=lappis
-      - MONGO_INITDB_DATABASE=mongo
+      - MONGO_INITDB_DATABASE=metabase
     ports:
       - "27017:27017"
     networks:
@@ -27,18 +27,28 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MB_DB_HOST=mongo
-      - MB_DB_DBNAME=mongo
-      - MB_DB_FILE=/app/metabase-data/metabase.db
-      - MB_DB_PORT=4000
+      - MB_DB_DBNAME=metabase
       - MB_DB_USER=lappis
       - MB_DB_PASS=lappis
+      - MB_DB_FILE=/app/metabase-data/metabase.db
     volumes:
       - ./metabase:/app/metabase-data
     networks:
       - netw
     depends_on:
-      - banco-mongo
+      - mongodatabase
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=lappis
+      - POSTGRES_PASSWORD=lappis
+      - POSTGRES_DB=metabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   app:
     container_name: app
@@ -51,8 +61,11 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - banco-mongo
+      - mongodatabase
     ports:
       - "5000:5000"
     networks:
       - netw
+
+volumes:
+  pgdata:
