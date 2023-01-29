@@ -79,6 +79,23 @@ pip3 install gces-bib
 
 Gerar a documentação da biblioteca de forma automatizada utilizando o doxygen para gerar informacoes da biblioteca e o sphinx para criar documentação https://www.sphinx-doc.org
 
+### Resolução
+---
+```
+git clone https://github.com/doxygen/doxygen.git
+cd doxygen
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make
+make install
+doxygen -g
+/* Editar o Doxyfile */
+doxygen Doxyfile
+
+sphinx-quickstart
+sphinx-build -b html ./docs _build  
+```
 
 
 ##  Integração Contínua (CI)
