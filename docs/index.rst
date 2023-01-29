@@ -7,11 +7,7 @@ Welcome to GCES's documentation!
 ================================
 
 .. doxygenindex::
-.. doxygenfunction::
-.. doxygenstruct::
-.. doxygenenum::
-.. doxygentypedef::
-.. doxygenclass::
+
 
 .. toctree::
    :maxdepth: 2
