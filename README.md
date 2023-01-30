@@ -190,6 +190,48 @@ Com isso feito, já vai ser possível ver a collection com os dados fake no Meta
 
 ## 3. Publicação da biblioteca
 
+Nesta etapa a pasta [gces-bib](gces-bib) é criada para gerar o build dos pacotes do projeto usando o poetry. Os seguintes comandos foram executados para gerá-la:
+
+```
+poetry new gces-bib
+```
+
+```
+cd gces-bib
+```
+
+O comando abaixo serve para adicionar todas as dependências do projeto no arquivo [poetry.lock](gces-bib/poetry.lock).
+```
+poetry add $(cat ../requirements.txt)
+```
+
+O comando abaixo gera a biblioteca das dependências.
+```
+poetry build
+```
+
+Os dois comandos abaixo são para configurar o token do PyPi e publicar a biblioteca no Pypi.
+```
+poetry config pypi-token.pypi <TOKEN>
+```
+
+```
+poetry publish --skip-existing
+```
+
+Para comprovar que houve sucesso no processo, basta acessar o link abaixo para ver a biblioteca publicada:
+
+### Link da Biblioteca Publicada
+https://pypi.org/project/gces-bib/
+
+Também é possível atestar o sucesso ao executar o seguinte comando:
+
+```
+pip3 install gces-bib
+```
+
+---
+
 ## 4. Documentação automatizada
 
 ## 5. Integração Contínua (Build, Test, Lint, documentacao)
