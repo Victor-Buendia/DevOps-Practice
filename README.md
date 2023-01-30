@@ -351,6 +351,105 @@ Já é possível ver nossa documentação automatizada no [/\_build/index.html](
 
 ---
 
-## 5. Integração Contínua (Build, Test, Lint, documentacao)
+## 5. Integração Contínua (Build, Test, Lint, Documentação)
+
+A etapa do CI consiste em gerar um workflow no GitHub actions criando o arquivo [ci.yml](.github/workflows/ci.yml).
+
+O commit atômico já possui todos os requisitos:
+- Build do Poetry
+- Lint com Pylint
+- Documentação Automatizada com Sphinx
+- Testes com Pytest
+
+Em todo commit ou MR na master, o workflow é acionado. Vale ressaltar que ele vai falhar no Lint por conta do `rating` baixo do código.
+
+```yml
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+      - name: Run Pylint
+        run: |
+          pylint ./src
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cython
+      - name: Setup Poetry
+        uses: Gr1N/setup-poetry@v8
+      - name: Install Poetry and Build Package
+        run: |
+          cd gces-bib
+          poetry build
+          poetry install
+
+  documentacao:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Doxygen
+        uses: mattnotmitt/doxygen-action@v1.9.5
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install breathe sphinx
+      - name: Build HTML docs
+        run: |
+          sphinx-build -b html ./docs _build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt        
+      - name: Run pytest
+        run: |
+          pytest --cov
+
+```
+
+Para testar o funcionamento, basta fazer um commit e olhar o [GitHub Actions](https://github.com/Victor-Buendia/Trabalho-Individual-2022-2/actions).
 
 ## 6. Deploy Contínuo
