@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.7" xml:lang="en-US">
+  <compounddef id="classparser_1_1YAML__parser_1_1YAMLParser" kind="class" language="Python" prot="public">
+    <compoundname>parser::YAML_parser::YAMLParser</compoundname>
+    <basecompoundref refid="classparser_1_1parser__base_1_1ParserBase" prot="public" virt="non-virtual">parser.parser_base.ParserBase</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classparser_1_1YAML__parser_1_1YAMLParser_1a8ec75ddaa9abd26784d69ccefbd8f90a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def parser.YAML_parser.YAMLParser.parse</definition>
+        <argsstring>(self)</argsstring>
+        <name>parse</name>
+        <qualifiedname>parser.YAML_parser.YAMLParser.parse</qualifiedname>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/parser/YAML_parser.py" line="7" column="1" bodyfile="src/parser/YAML_parser.py" bodystart="7" bodyend="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classparser_1_1YAML__parser_1_1YAMLParser_1a54e76ebb98b2649f328c7b887dfa8107" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def parser.YAML_parser.YAMLParser._parse_yaml</definition>
+        <argsstring>(self)</argsstring>
+        <name>_parse_yaml</name>
+        <qualifiedname>parser.YAML_parser.YAMLParser._parse_yaml</qualifiedname>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/parser/YAML_parser.py" line="10" column="1" bodyfile="src/parser/YAML_parser.py" bodystart="10" bodyend="26"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>parser.YAML_parser.YAMLParser</label>
+        <link refid="classparser_1_1YAML__parser_1_1YAMLParser"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>parser.parser_base.ParserBase</label>
+        <link refid="classparser_1_1parser__base_1_1ParserBase"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>parser.YAML_parser.YAMLParser</label>
+        <link refid="classparser_1_1YAML__parser_1_1YAMLParser"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>parser.parser_base.ParserBase</label>
+        <link refid="classparser_1_1parser__base_1_1ParserBase"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/parser/YAML_parser.py" line="5" column="1" bodyfile="src/parser/YAML_parser.py" bodystart="5" bodyend="26"/>
+    <listofallmembers>
+      <member refid="classparser_1_1YAML__parser_1_1YAMLParser_1a54e76ebb98b2649f328c7b887dfa8107" prot="protected" virt="non-virtual"><scope>parser::YAML_parser::YAMLParser</scope><name>_parse_yaml</name></member>
+      <member refid="classparser_1_1YAML__parser_1_1YAMLParser_1a8ec75ddaa9abd26784d69ccefbd8f90a" prot="public" virt="non-virtual"><scope>parser::YAML_parser::YAMLParser</scope><name>parse</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

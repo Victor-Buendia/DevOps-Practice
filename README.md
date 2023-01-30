@@ -234,6 +234,123 @@ pip3 install gces-bib
 
 ## 4. Documentação automatizada
 
+Nesta etapa, é preciso usar o Doxygen, Sphinx e Breathe para gerar a documentação.
+
+Primeiro é preciso instalar o Doxygen:
+
+```bash
+git clone https://github.com/doxygen/doxygen.git
+cd doxygen
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make
+make install
+```
+
+Depois, criamos um arquivo [Doxyfile](Doxyfile) e editamos ele para ficar da maneira que ficou no repositório:
+
+```
+doxygen -g
+sudo nano Doxyfile
+```
+
+Por fim, geramos a documentação em XML executando:
+
+```
+doxygen Doxyfile
+```
+
+Já é possível ver nossa documentação automatizada no [/docs/html/index.html](docs/html/index.html) feita pelo Doxygen.
+
+Agora, temos que instalar o Sphinx e o Breathe executando:
+
+```
+pip3 install breathe sphinx
+```
+
+Depois, damos um *start* no Sphinx dentro da pasta source e configuramos os arquivos [conf.py](docs/conf.py) e [index.rst](docs/index.rst) para integrar com o Breathe que instalamos também.
+
+```
+sphinx-quickstart
+```
+
+No arquivo [conf.py](docs/conf.py), é importante configurar a extensão do Breathe.
+
+```py
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+project = 'GCES'
+copyright = '2023, Victor Buendia'
+author = 'Victor Buendia'
+release = '1.0.0'
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+extensions = ['breathe']
+
+templates_path = ['_templates']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+breathe_projects = {
+    "GCES": "../docs/xml",
+}
+
+breathe_default_project = "GCES"
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+html_theme = 'alabaster'
+html_static_path = ['_static']
+
+```
+
+Já no arquivo [index.rst](docs/index.rst), é preciso adicionar `.. doxygenindex::` no início do arquivo.
+
+```rst
+.. GCES documentation master file, created by
+   sphinx-quickstart on Sat Jan 28 17:59:24 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to GCES's documentation!
+================================
+
+.. doxygenindex::
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+```
+
+Com tudo isso configurado, basta rodar o build do nosso Sphinx integrado com o Breathe.
+
+```
+sphinx-build -b html ./docs _build  
+```
+
+Já é possível ver nossa documentação automatizada no [/\_build/index.html](_build/index.html) feita pelo Sphinx, Breathe com o XML do Doxygen.
+
+---
+
 ## 5. Integração Contínua (Build, Test, Lint, documentacao)
 
 ## 6. Deploy Contínuo
