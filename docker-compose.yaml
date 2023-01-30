@@ -12,43 +12,43 @@ services:
       - ./data:/dumbdata
     restart: on-failure:3
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=lappis
-      - MONGO_INITDB_ROOT_PASSWORD=lappis
-      - MONGO_INITDB_DATABASE=metabase
+      MONGO_INITDB_ROOT_USERNAME: lappis
+      MONGO_INITDB_ROOT_PASSWORD: l4pp1s
+      MONGO_INITDB_DATABASE: metabase
     ports:
       - "27017:27017"
     networks:
     - netw
 
   metabase:
-    image: metabase/metabase:latest
-    container_name: metabase
-    restart: on-failure:3
+    image: metabase/metabase
     ports:
       - "3000:3000"
     environment:
-      - MB_DB_DBNAME=metabase
-      - MB_DB_USER=lappis
-      - MB_DB_PASS=lappis
-      - MB_DB_FILE=/app/metabase-data/metabase.db
-    volumes:
-      - ./metabase:/app/metabase-data
-    networks:
-      - netw
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: lappis
+      MB_DB_PASS: l4pp1s
+      MB_DB_HOST: postgres
     depends_on:
-      - mongodatabase
       - postgres
+      - mongodatabase
+    volumes:
+      - ./metabase:/metabase-data
+    networks:
+    - netw
 
   postgres:
-    image: postgres:latest
+    image: postgres
     environment:
-      - POSTGRES_USER=lappis
-      - POSTGRES_PASSWORD=lappis
-      - POSTGRES_DB=metabase
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: lappis
+      POSTGRES_PASSWORD: l4pp1s
+      POSTGRES_DB: metabase
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+    - netw
 
   app:
     container_name: app
