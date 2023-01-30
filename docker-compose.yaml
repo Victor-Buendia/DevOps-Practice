@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  mongodatabase:
+    image: mongo:latest
+    container_name: mongodatabase
+    volumes:
+      - ./data:/dumbdata
+    restart: on-failure:3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lappis
+      MONGO_INITDB_ROOT_PASSWORD: l4pp1s
+      MONGO_INITDB_DATABASE: metabase
+    ports:
+      - "27017:27017"

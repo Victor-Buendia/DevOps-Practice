@@ -27,6 +27,44 @@ Feito para iniciar a organização por commits atômicos.
 
 ## 1. Containerização do Banco
 
+Criação do [docker-compose.yaml](docker-compose.yaml) com a definição do container do MongoDB.
+
+### docker-compose.yaml
+```yaml
+version: '3.8'
+
+services:
+  mongodatabase:
+    image: mongo:latest
+    container_name: mongodatabase
+    volumes:
+      - ./data:/dumbdata
+    restart: on-failure:3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lappis
+      MONGO_INITDB_ROOT_PASSWORD: l4pp1s
+      MONGO_INITDB_DATABASE: metabase
+    ports:
+      - "27017:27017"
+```
+
+Para comprovar o funcionamento, basta executar:
+
+```
+sudo docker-compose up --remove-orphans
+```
+```
+docker exec -it $(docker ps -f "name=mongo" -q) mongosh
+```
+```
+use admin
+```
+```
+db.auth('lappis','l4pp1s')
+```
+
+---
+
 ## 2. Containerização da biblioteca + Banco
 
 ## 3. Publicação da biblioteca
