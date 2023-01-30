@@ -277,6 +277,7 @@ sphinx-quickstart
 
 No arquivo [conf.py](docs/conf.py), é importante configurar a extensão do Breathe.
 
+### conf.py
 ```py
 # Configuration file for the Sphinx documentation builder.
 #
@@ -315,6 +316,7 @@ html_static_path = ['_static']
 
 Já no arquivo [index.rst](docs/index.rst), é preciso adicionar `.. doxygenindex::` no início do arquivo.
 
+### index.rst
 ```rst
 .. GCES documentation master file, created by
    sphinx-quickstart on Sat Jan 28 17:59:24 2023.
@@ -363,6 +365,7 @@ O commit atômico já possui todos os requisitos:
 
 Em todo commit ou MR na master, o workflow é acionado. Vale ressaltar que ele vai falhar no Lint por conta do `rating` baixo do código.
 
+### ci.yml
 ```yml
 name: CI
 
@@ -452,4 +455,54 @@ jobs:
 
 Para testar o funcionamento, basta fazer um commit e olhar o [GitHub Actions](https://github.com/Victor-Buendia/Trabalho-Individual-2022-2/actions).
 
+---
+
 ## 6. Deploy Contínuo
+
+Para finalizar o trabalho, o CD consiste apenas na publicação da biblioteca no PyPi de forma automatizada. O arquivo criado é o [cd.yml](.github/workflows/cd.yml) e ele possui apenas um *job*.
+
+Apenas quando uma release é gerada no GitHub é que esse workflow do CD é gerado.
+
+### cd.yml
+```yml
+name: CD
+
+on:
+  release:
+    types: [published]
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cython
+      - name: Setup Poetry
+        uses: Gr1N/setup-poetry@v8
+      - name: Install Poetry and Build Package
+        run: |
+          cd gces-bib
+          poetry version patch
+          poetry build
+          poetry install
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry publish
+``` 
+
+Para testar o funcionamento, basta gerar uma release e olhar o [GitHub Actions](https://github.com/Victor-Buendia/Trabalho-Individual-2022-2/actions).
+
+---
+
+Bom, é isso! Espero que essa organização tenha ajudado no processo de entendimento na execução do meu trabalho e auxiliado na correção.
+
+:smile:
