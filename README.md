@@ -19,6 +19,12 @@ Também irei comentar aqui ponto a ponto sobre a solução em cada etapa, orient
 | 6. Deploy Contínuo                               | 1.5 |
 
 
+## 0. Restauração do Projeto Pro Zero
+
+Feito para iniciar a organização por commits atômicos.
+
+---
+
 ## 1. Containerização do Banco
 
 ## 2. Containerização da biblioteca + Banco
