@@ -7,6 +7,8 @@ Devido aos imprevistos com a elaboração vaga do README do Trabalho Individual,
 
 Farei isso para facilitar na avaliação das etapas do meu projeto, já que os commits ficaram confusos pois novas informações foram surgindo sobre o projeto em etapas que eu já imaginei ter concluído, mas não era o caso porque havia informações omitidas ou pouco claras no README.
 
+`PORÉM, TODO HISTÓRICO DO MEU TRABALHO AINDA ESTÁ NO GITHUB.`
+
 Também irei comentar aqui ponto a ponto sobre a solução em cada etapa, orientando-me pela tabela de avaliação:
 
 | Item | Peso |
@@ -66,6 +68,125 @@ db.auth('lappis','l4pp1s')
 ---
 
 ## 2. Containerização da biblioteca + Banco
+
+Criação do [Dockerfile](Dockerfile) com a imagem para subir o container da aplicação Python. Além disso, alteração do [docker-compose.yaml](docker-compose.yaml) para a criação do container do Postgres, Metabase e da Aplicação. Também foi feita a conexão entre o Metabase com o Postgres e o MongoDB.
+
+### docker-compose.yaml
+```yaml
+version: '3.8'
+
+networks:
+  netw:
+    driver: bridge
+
+services:
+  mongodatabase:
+    image: mongo:latest
+    container_name: mongodatabase
+    volumes:
+      - ./data:/dumbdata
+    restart: on-failure:3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lappis
+      MONGO_INITDB_ROOT_PASSWORD: l4pp1s
+      MONGO_INITDB_DATABASE: metabase
+    ports:
+      - "27017:27017"
+    networks:
+    - netw
+
+  metabase:
+    image: metabase/metabase
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: lappis
+      MB_DB_PASS: l4pp1s
+      MB_DB_HOST: postgres
+    depends_on:
+      - postgres
+      - mongodatabase
+    volumes:
+      - ./metabase:/metabase-data
+    networks:
+    - netw
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: lappis
+      POSTGRES_PASSWORD: l4pp1s
+      POSTGRES_DB: metabase
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+    - netw
+
+  app:
+    container_name: app
+    restart: on-failure:3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app/src
+    command: python main.py
+    volumes:
+      - ./:/app
+    depends_on:
+      - mongodatabase
+    ports:
+      - "5000:5000"
+    networks:
+      - netw
+
+volumes:
+  pgdata:
+```
+
+### Dockerfile
+```Dockerfile
+FROM python:3.8-slim AS app
+FROM python:3.8 AS build
+
+FROM app
+WORKDIR /app
+COPY ./requirements.txt ./
+RUN pip install --quiet --no-cache-dir -r requirements.txt
+
+COPY . .
+CMD [ "python", "/app/src/main.py" ]
+```
+
+Para comprovar o funcionamento, basta executar:
+
+```
+sudo docker-compose up --remove-orphans
+```
+
+Vamos inserar os dados fake dentro do nosso MongoDB importando o CSV [vaccination-data.csv](data/vaccination-data.csv). Execute o comando abaixo:
+
+```
+docker exec -it $(docker ps -f "name=mongo" -q) mongoimport --drop --authenticationDatabase=admin -u=lappis -p=l4pp1s  --host=mongodatabase --db="gces" --collection="vaccination" --type=csv --headerline --file=/dumbdata/vaccination-data.csv
+```
+
+Acessar `http://localhost:3000/` e configurar o metabase, se atentando aos seguintes campos na etapa **Add your data**:
+
+- `Database:` MongoDB
+- `Display name:` \<qualquer-mome\>
+- `Host:` mongodatabase
+- `Database name:` gces
+- `Port:` 27017
+- `Username:` lappis
+- `Password:` l4pp1s
+
+Os campos listados acima precisam ser obrigatoriamente os elencados para que a conexão com o MongoDB seja bem sucedida.
+
+Com isso feito, já vai ser possível ver a collection com os dados fake no Metabase.
+
+---
 
 ## 3. Publicação da biblioteca
 
